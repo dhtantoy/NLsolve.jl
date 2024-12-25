@@ -14,14 +14,15 @@ function nlsolve(df::Union{NonDifferentiable, OnceDifferentiable},
                  m::Integer = 10,
                  beta::Real = 1,
                  aa_start::Integer = 1,
+                 p::Real = Inf,
                  droptol::Real = convert(real(eltype(initial_x)), 1e10))
     if show_trace
-        @printf "Iter     f(x) inf-norm    Step 2-norm \n"
+        @printf "Iter     f(x) %d-norm    Step 2-norm \n" p
         @printf "------   --------------   --------------\n"
     end
     if method == :newton
         newton(df, initial_x, xtol, ftol, iterations,
-               store_trace, show_trace, extended_trace, linesearch; linsolve=linsolve)
+               store_trace, show_trace, extended_trace, p, linesearch; linsolve=linsolve)
     elseif method == :trust_region
         trust_region(df, initial_x, xtol, ftol, iterations,
                      store_trace, show_trace, extended_trace, factor,
